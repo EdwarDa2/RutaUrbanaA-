@@ -18,6 +18,7 @@ from ui.mapa import preparar_elementos_mapa, formatear_nombre_nodo
 from ui.web_visualizador import (
     crear_figura_mapa_plotly,
     crear_figura_arbol_plotly,
+    formatear_nombre_ruta,
 )
 
 
@@ -241,7 +242,6 @@ def main():
             elementos_base,
             modo="viajero",
             paso_idx=0,
-            factor_separacion_y=2.5,
         )
         st.plotly_chart(fig_base, width="stretch")
         return
@@ -337,7 +337,7 @@ def main():
 
     # --- PESTAÑA 1: MAPA URBANO INTERACTIVO ---
     with tab_mapa:
-        ctrl_col1, ctrl_col2, ctrl_col3 = st.columns([1.5, 3, 1.5])
+        ctrl_col1, ctrl_col2 = st.columns([1.5, 3])
         with ctrl_col1:
             modo_visual = st.radio(
                 "Modo de Visualización:",
@@ -361,15 +361,6 @@ def main():
                 help="Avanza o retrocede los pasos de la búsqueda o del viaje",
             )
 
-        with ctrl_col3:
-            st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
-            factor_y = st.select_slider(
-                "Nivel de Separación Espacial:",
-                options=[1.8, 2.2, 2.5, 2.8, 3.2],
-                value=2.5,
-                help="Ajusta el espaciado para máxima legibilidad entre calles y avenidas",
-            )
-
         # Banner descriptivo del paso actual
         if es_modo_exploracion and pasos_exp:
             p_actual = pasos_exp[paso_slider]
@@ -390,7 +381,6 @@ def main():
                 elementos,
                 modo="exploracion",
                 paso_exploracion=p_actual,
-                factor_separacion_y=factor_y,
             )
         else:
             if paso_slider == 0:
@@ -403,14 +393,13 @@ def main():
                 tr_act = elementos.aristas_solucion[paso_slider - 1]
                 nom_dest_tramo = formatear_nombre_nodo(tr_act["destino"])
                 id_ruta = tr_act.get("ruta")
-                medio_str = "a pie" if tr_act.get("tipo") == "CAMINANDO" else (f"en transporte ({id_ruta})" if id_ruta else "en transporte público")
+                medio_str = "a pie" if tr_act.get("tipo") == "CAMINANDO" else (f"en {formatear_nombre_ruta(id_ruta)}" if id_ruta else "en transporte público")
                 msg_step = f"<b>Paso {paso_slider} de {total_pasos}:</b> Avanzando hacia <b>{nom_dest_tramo}</b> ({medio_str})."
             st.markdown(f"<div class='step-banner'>{msg_step}</div>", unsafe_allow_html=True)
             fig_mapa = crear_figura_mapa_plotly(
                 elementos,
                 modo="viajero",
                 paso_idx=paso_slider,
-                factor_separacion_y=factor_y,
             )
 
         st.plotly_chart(fig_mapa, width="stretch")

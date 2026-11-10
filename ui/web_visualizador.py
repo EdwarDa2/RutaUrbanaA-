@@ -87,28 +87,41 @@ def transformar_coordenadas(
     return {nid: (round(p[0], 2), round(p[1], 2)) for nid, p in pos_vis.items()}
 
 
+def formatear_nombre_ruta(rid: str) -> str:
+    """Convierte 'ruta_1_belisario_ida' en 'R1 Belisario (ida)' para la leyenda legible."""
+    if not rid:
+        return ""
+    tokens = [t for t in str(rid).replace("-", "_").split("_") if t]
+    if not tokens:
+        return str(rid)
+    etiqueta = ""
+    resto = tokens
+    if len(tokens) >= 2 and tokens[0].lower() in ("ruta", "linea", "línea", "r"):
+        etiqueta = f"R{tokens[1]}"
+        resto = tokens[2:]
+    partes = []
+    for t in resto:
+        partes.append(f"({t.lower()})" if t.lower() in ("ida", "vuelta", "regreso") else t.capitalize())
+    texto = f"{etiqueta} {' '.join(partes)}".strip()
+    return texto or str(rid)
+
+
 def crear_figura_mapa_plotly(
     elementos: ElementosMapa,
     modo: str = "viajero",
     paso_idx: int | None = None,
     paso_exploracion: PasoExploracion | None = None,
-    factor_separacion_y: float = 2.4,
 ) -> go.Figure:
-    """Construye un mapa interactivo con Plotly, zoom fluido y separación espacial sin emojis."""
-    pos_vis = transformar_coordenadas(elementos.posiciones, factor_y=factor_separacion_y, distancia_minima=165.0)
+    """Construye un mapa interactivo a escala real (metros) con Plotly, sin distorsion de coordenadas."""
+    posiciones = elementos.posiciones
     fig = go.Figure()
-
-    # Mapeo de coordenadas originales a coordenadas visuales transformadas
-    coord_map = {elem_pos: pos_vis[nid] for nid, elem_pos in elementos.posiciones.items() if nid in pos_vis}
 
     # 1. Capa de Calles Peatonales (Red base de la ciudad)
     calles_x: list[float | None] = []
     calles_y: list[float | None] = []
     for p1, p2 in elementos.aristas_caminando:
-        p1_v = coord_map.get(p1, (p1[0], p1[1] * factor_separacion_y))
-        p2_v = coord_map.get(p2, (p2[0], p2[1] * factor_separacion_y))
-        calles_x.extend([p1_v[0], p2_v[0], None])
-        calles_y.extend([p1_v[1], p2_v[1], None])
+        calles_x.extend([p1[0], p2[0], None])
+        calles_y.extend([p1[1], p2[1], None])
 
     fig.add_trace(
         go.Scatter(
@@ -122,16 +135,15 @@ def crear_figura_mapa_plotly(
         )
     )
 
-    # 2. Capa de Rutas de Transporte Público
+    # 2. Capa de Rutas de Transporte Público (coordenadas reales, a escala)
     for idx, (rid, segmentos) in enumerate(elementos.aristas_transporte.items()):
         rx: list[float | None] = []
         ry: list[float | None] = []
         col = COLORES_RUTAS[idx % len(COLORES_RUTAS)]
         for p1, p2 in segmentos:
-            p1_v = coord_map.get(p1, (p1[0], p1[1] * factor_separacion_y))
-            p2_v = coord_map.get(p2, (p2[0], p2[1] * factor_separacion_y))
-            rx.extend([p1_v[0], p2_v[0], None])
-            ry.extend([p2_v[1], p2_v[1], None])
+            rx.extend([p1[0], p2[0], None])
+            ry.extend([p1[1], p2[1], None])
+        nombre_ruta = formatear_nombre_ruta(rid)
         fig.add_trace(
             go.Scatter(
                 x=rx,
@@ -140,30 +152,31 @@ def crear_figura_mapa_plotly(
                 line=dict(color=col, width=2.8),
                 opacity=0.35,
                 hoverinfo="text",
-                hovertext=f"Ruta de Transporte: {rid}",
-                name=f"Ruta {rid}",
+                hovertext=f"Ruta de Transporte: {nombre_ruta}",
+                name=nombre_ruta,
                 showlegend=True,
             )
         )
 
-    # 3. MODO VIAJERO: Tramos de la solución recorrida
+    # 3. MODO VIAJERO: Tramos de la solución recorrida (verde a pie, azul en transporte)
     if modo == "viajero" and elementos.aristas_solucion:
         limite = len(elementos.aristas_solucion) if paso_idx is None else max(0, min(paso_idx, len(elementos.aristas_solucion)))
         tramos_activos = elementos.aristas_solucion[:limite]
 
-        cam_x, cam_y = [], []
-        tra_x, tra_y = [], []
+        cam_x, cam_y, cam_hover = [], [], []
+        tra_x, tra_y, tra_hover = [], [], []
         for tr in tramos_activos:
             p1 = tr["p1"]
             p2 = tr["p2"]
-            p1_v = coord_map.get(p1, (p1[0], p1[1] * factor_separacion_y))
-            p2_v = coord_map.get(p2, (p2[0], p2[1] * factor_separacion_y))
             if tr["tipo"] == "CAMINANDO":
-                cam_x.extend([p1_v[0], p2_v[0], None])
-                cam_y.extend([p1_v[1], p2_v[1], None])
+                cam_x.extend([p1[0], p2[0], None])
+                cam_y.extend([p1[1], p2[1], None])
+                cam_hover.extend(["A pie", "A pie", None])
             else:
-                tra_x.extend([p1_v[0], p2_v[0], None])
-                tra_y.extend([p1_v[1], p2_v[1], None])
+                etiqueta = f"Transporte: {formatear_nombre_ruta(tr['ruta']) or 'público'}"
+                tra_x.extend([p1[0], p2[0], None])
+                tra_y.extend([p1[1], p2[1], None])
+                tra_hover.extend([etiqueta, etiqueta, None])
 
         if cam_x:
             fig.add_trace(
@@ -174,7 +187,7 @@ def crear_figura_mapa_plotly(
                     line=dict(color=COLOR_CAMINANDO, width=5.5),
                     name="Tramo a Pie",
                     hoverinfo="text",
-                    hovertext="Caminando",
+                    hovertext=cam_hover,
                 )
             )
         if tra_x:
@@ -186,7 +199,7 @@ def crear_figura_mapa_plotly(
                     line=dict(color=COLOR_TRANSPORTE, width=5.5),
                     name="Tramo en Transporte",
                     hoverinfo="text",
-                    hovertext="Transporte Público",
+                    hovertext=tra_hover,
                 )
             )
 
@@ -194,9 +207,9 @@ def crear_figura_mapa_plotly(
     if modo == "exploracion" and paso_exploracion:
         exp_x, exp_y = [], []
         for de_id, a_id in paso_exploracion.aristas_exploradas:
-            if de_id in pos_vis and a_id in pos_vis:
-                p1 = pos_vis[de_id]
-                p2 = pos_vis[a_id]
+            if de_id in posiciones and a_id in posiciones:
+                p1 = posiciones[de_id]
+                p2 = posiciones[a_id]
                 exp_x.extend([p1[0], p2[0], None])
                 exp_y.extend([p1[1], p2[1], None])
 
@@ -219,10 +232,8 @@ def crear_figura_mapa_plotly(
             for tr in elementos.aristas_solucion:
                 p1 = tr["p1"]
                 p2 = tr["p2"]
-                p1_v = coord_map.get(p1, (p1[0], p1[1] * factor_separacion_y))
-                p2_v = coord_map.get(p2, (p2[0], p2[1] * factor_separacion_y))
-                sol_x.extend([p1_v[0], p2_v[0], None])
-                sol_y.extend([p1_v[1], p2_v[1], None])
+                sol_x.extend([p1[0], p2[0], None])
+                sol_y.extend([p1[1], p2[1], None])
             fig.add_trace(
                 go.Scatter(
                     x=sol_x,
@@ -233,7 +244,12 @@ def crear_figura_mapa_plotly(
                 )
             )
 
-    # 5. Capa de Nodos Urbanos (Puntos con información rica)
+    # 5. Capa de Nodos Urbanos (coordenadas reales; etiquetas solo de puntos clave)
+    nodos_ruta: set[str] = set()
+    for tr in elementos.aristas_solucion:
+        nodos_ruta.add(tr["origen"])
+        nodos_ruta.add(tr["destino"])
+
     hitos_destacados = {
         "parque_marimba", "catedral_san_marcos", "plaza_crystal", "hospital_regional",
         "parque_tuchtlan", "plaza_las_americas", "parque_cana_hueca", "unach_campus1"
@@ -248,10 +264,9 @@ def crear_figura_mapa_plotly(
     cerr_x, cerr_y, cerr_hover = [], [], []
     front_x, front_y, front_hover = [], [], []
 
-    for nid, (x, y) in pos_vis.items():
+    for nid, (x, y) in posiciones.items():
         nombre = formatear_nombre_nodo(nid)
-        real_x, real_y = elementos.posiciones[nid]
-        hover_info = f"<b>{nombre}</b><br>ID: {nid}<br>Coordenadas: ({real_x:.0f}m, {real_y:.0f}m)"
+        hover_info = f"<b>{nombre}</b><br>Coordenadas: ({x:.0f} m, {y:.0f} m)"
 
         if modo == "exploracion" and paso_exploracion:
             if nid in paso_exploracion.nodos_frontera:
@@ -268,7 +283,12 @@ def crear_figura_mapa_plotly(
         base_x.append(x)
         base_y.append(y)
         base_hover.append(hover_info)
-        base_names.append(nombre if nid in hitos_destacados else "")
+        # Etiqueta fija solo para hitos y paradas de la ruta; origen/destino tienen su propia anotación.
+        etiquetar = (nid in hitos_destacados or nid in nodos_ruta) and nid not in (
+            elementos.origen_id,
+            elementos.destino_id,
+        )
+        base_names.append(nombre if etiquetar else "")
 
     # Nodos base
     fig.add_trace(
@@ -278,7 +298,7 @@ def crear_figura_mapa_plotly(
             mode="markers+text",
             text=base_names,
             textposition="top center",
-            textfont=dict(color="#cbd5e1", size=10, family="Segoe UI"),
+            textfont=dict(color="#cbd5e1", size=11, family="Segoe UI"),
             marker=dict(color="#334155", size=9, line=dict(color="#64748b", width=1.2)),
             hoverinfo="text",
             hovertext=base_hover,
@@ -314,84 +334,148 @@ def crear_figura_mapa_plotly(
             )
         )
 
-    # 6. Destacar ORIGEN y DESTINO sin emojis
-    if elementos.origen_id and elementos.origen_id in pos_vis:
-        ox, oy = pos_vis[elementos.origen_id]
+    # 6. Destacar ORIGEN y DESTINO con una sola etiqueta y fondo semitransparente
+    if elementos.origen_id and elementos.origen_id in posiciones:
+        ox, oy = posiciones[elementos.origen_id]
         nom_o = formatear_nombre_nodo(elementos.origen_id)
         fig.add_trace(
             go.Scatter(
                 x=[ox],
                 y=[oy],
-                mode="markers+text",
+                mode="markers",
                 marker=dict(color=COLOR_ORIGEN, size=20, symbol="circle", line=dict(color="white", width=2.5)),
-                text=[f"ORIGEN: {nom_o}"],
-                textposition="bottom center",
-                textfont=dict(color="#34d399", size=11, family="Segoe UI", weight="bold"),
                 name="Origen",
                 hoverinfo="text",
                 hovertext=f"<b>Punto de Partida:</b> {nom_o}",
             )
         )
+        fig.add_annotation(
+            x=ox,
+            y=oy,
+            text=f"ORIGEN: {nom_o}",
+            showarrow=False,
+            yshift=-24,
+            xanchor="center",
+            font=dict(color="#34d399", size=12),
+            bgcolor="rgba(11, 15, 25, 0.75)",
+            bordercolor="#10b981",
+            borderwidth=1,
+            borderpad=4,
+        )
 
-    if elementos.destino_id and elementos.destino_id in pos_vis:
-        dx, dy = pos_vis[elementos.destino_id]
+    if elementos.destino_id and elementos.destino_id in posiciones:
+        dxp, dyp = posiciones[elementos.destino_id]
         nom_d = formatear_nombre_nodo(elementos.destino_id)
-        col_d = COLOR_META if (paso_exploracion and paso_exploracion.es_meta) else COLOR_DESTINO
-        txt_meta = f"META ALCANZADA: {nom_d}" if (paso_exploracion and paso_exploracion.es_meta) else f"DESTINO: {nom_d}"
-        c_font = "#34d399" if (paso_exploracion and paso_exploracion.es_meta) else "#fb7185"
+        es_meta = bool(paso_exploracion and paso_exploracion.es_meta)
+        col_d = COLOR_META if es_meta else COLOR_DESTINO
+        txt_meta = f"META: {nom_d}" if es_meta else f"DESTINO: {nom_d}"
+        c_font = "#34d399" if es_meta else "#fb7185"
+        c_borde = "#10b981" if es_meta else "#f43f5e"
         fig.add_trace(
             go.Scatter(
-                x=[dx],
-                y=[dy],
-                mode="markers+text",
+                x=[dxp],
+                y=[dyp],
+                mode="markers",
                 marker=dict(color=col_d, size=22, symbol="star", line=dict(color="white", width=2.5)),
-                text=[txt_meta],
-                textposition="top center",
-                textfont=dict(color=c_font, size=11, family="Segoe UI", weight="bold"),
                 name="Destino",
                 hoverinfo="text",
                 hovertext=f"<b>Punto de Llegada:</b> {nom_d}",
             )
         )
+        fig.add_annotation(
+            x=dxp,
+            y=dyp,
+            text=txt_meta,
+            showarrow=False,
+            yshift=26,
+            xanchor="center",
+            font=dict(color=c_font, size=12),
+            bgcolor="rgba(11, 15, 25, 0.75)",
+            bordercolor=c_borde,
+            borderwidth=1,
+            borderpad=4,
+        )
 
-    # 7. Marcador interactivo del paso actual sin emojis
-    if modo == "viajero" and nodo_viajero and nodo_viajero in pos_vis:
-        vx, vy = pos_vis[nodo_viajero]
+    # 7. Símbolos sobre los nodos donde hay ABORDAR o TRANSBORDAR
+    if modo == "viajero" and elementos.nodos_transbordo:
+        tb_x, tb_y, tb_hover = [], [], []
+        for nid in elementos.nodos_transbordo:
+            if nid in posiciones:
+                px, py = posiciones[nid]
+                tb_x.append(px)
+                tb_y.append(py)
+                tb_hover.append(f"<b>{formatear_nombre_nodo(nid)}</b><br>Abordaje / Transbordo")
+        if tb_x:
+            fig.add_trace(
+                go.Scatter(
+                    x=tb_x,
+                    y=tb_y,
+                    mode="markers",
+                    marker=dict(color=COLOR_FRONTERA, size=15, symbol="diamond", line=dict(color="white", width=2)),
+                    name="Abordaje / Transbordo",
+                    hoverinfo="text",
+                    hovertext=tb_hover,
+                )
+            )
+
+    # 8. Marcador del viajero (sin etiqueta cuando coincide con origen o destino)
+    if modo == "viajero" and nodo_viajero and nodo_viajero in posiciones:
+        vx, vy = posiciones[nodo_viajero]
         nom_v = formatear_nombre_nodo(nodo_viajero)
         fig.add_trace(
             go.Scatter(
                 x=[vx],
                 y=[vy],
-                mode="markers+text",
+                mode="markers",
                 marker=dict(color=COLOR_ACTUAL, size=24, symbol="circle", line=dict(color="#b91c1c", width=3)),
-                text=[f"VIAJERO: {nom_v}"],
-                textposition="top center",
-                textfont=dict(color="#fde047", size=12, family="Segoe UI", weight="bold"),
                 name="Posición del Viajero",
                 hoverinfo="text",
                 hovertext=f"<b>Viajero situado en:</b> {nom_v}",
             )
         )
-    elif modo == "exploracion" and paso_exploracion and paso_exploracion.nodo_actual in pos_vis:
-        ex, ey = pos_vis[paso_exploracion.nodo_actual]
+        if nodo_viajero not in (elementos.origen_id, elementos.destino_id):
+            fig.add_annotation(
+                x=vx,
+                y=vy,
+                text=f"VIAJERO: {nom_v}",
+                showarrow=False,
+                xshift=28,
+                xanchor="left",
+                font=dict(color="#fde047", size=12),
+                bgcolor="rgba(11, 15, 25, 0.75)",
+                bordercolor="#facc15",
+                borderwidth=1,
+                borderpad=4,
+            )
+    elif modo == "exploracion" and paso_exploracion and paso_exploracion.nodo_actual in posiciones:
+        ex, ey = posiciones[paso_exploracion.nodo_actual]
         nom_e = formatear_nombre_nodo(paso_exploracion.nodo_actual)
-        txt_banner = f"EXPANDIENDO:<br>{nom_e}<br>f={paso_exploracion.f:.1f} (g={paso_exploracion.g:.1f} + h={paso_exploracion.h:.1f})"
         fig.add_trace(
             go.Scatter(
                 x=[ex],
                 y=[ey],
-                mode="markers+text",
+                mode="markers",
                 marker=dict(color=COLOR_ACTUAL, size=26, symbol="hexagram", line=dict(color="#e11d48", width=3)),
-                text=[f"EXPANDIENDO: {nom_e}"],
-                textposition="bottom center",
-                textfont=dict(color="#facc15", size=11, family="Segoe UI", weight="bold"),
                 name="Nodo en Expansión",
                 hoverinfo="text",
-                hovertext=txt_banner,
+                hovertext=f"<b>{nom_e}</b><br>f={paso_exploracion.f:.1f} (g={paso_exploracion.g:.1f} + h={paso_exploracion.h:.1f})",
             )
         )
+        fig.add_annotation(
+            x=ex,
+            y=ey,
+            text=f"EXPANDIENDO: {nom_e}",
+            showarrow=False,
+            yshift=-26,
+            xanchor="center",
+            font=dict(color="#facc15", size=12),
+            bgcolor="rgba(11, 15, 25, 0.75)",
+            bordercolor="#facc15",
+            borderwidth=1,
+            borderpad=4,
+        )
 
-    # Estilo y configuración de la visualización Plotly
+    # Estilo y configuración de la visualización Plotly (mapa a escala real en metros)
     fig.update_layout(
         template="plotly_dark",
         paper_bgcolor=COLOR_FONDO,
@@ -405,7 +489,7 @@ def crear_figura_mapa_plotly(
             color="#94a3b8",
         ),
         yaxis=dict(
-            title="Coordenada Y Espaciada (metros)",
+            title="Coordenada Y (metros)",
             showgrid=True,
             gridcolor=COLOR_GRID,
             zeroline=False,
@@ -431,7 +515,7 @@ def crear_figura_mapa_plotly(
             font_color="#f8fafc",
             bordercolor="#3b82f6",
         ),
-        height=640,
+        height=600,
     )
 
     return fig
