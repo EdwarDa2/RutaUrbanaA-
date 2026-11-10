@@ -177,13 +177,17 @@ def main():
             format_func=lambda k: opciones_criterio[k],
         )
 
+        pesos = None
         if criterio_key == "personalizado":
             st.markdown("##### Ajuste de Pesos:")
             w_tiempo = st.slider("Peso Tiempo (w1)", 0.0, 5.0, 1.0, 0.1)
             w_dinero = st.slider("Peso Dinero (w2)", 0.0, 5.0, 0.5, 0.1)
             w_transbordos = st.slider("Peso Transbordos (w3)", 0.0, 5.0, 2.0, 0.1)
             w_accesible = st.slider("Peso Accesibilidad (w4)", 0.0, 5.0, 0.5, 0.1)
-            pesos = Pesos(tiempo=w_tiempo, dinero=w_dinero, abordaje=w_transbordos, accesibilidad=w_accesible)
+            try:
+                pesos = Pesos(tiempo=w_tiempo, dinero=w_dinero, abordaje=w_transbordos, accesibilidad=w_accesible)
+            except ValueError as error:
+                st.error(f"Pesos inválidos: {error}")
         else:
             pesos = CRITERIOS_PREDEFINIDOS.get(criterio_key, Pesos())
 
@@ -205,6 +209,14 @@ def main():
         st.info(
             "Regla de negocio activa: No se puede seleccionar una ubicación inicial como meta al mismo tiempo. "
             "Por favor, selecciona un punto de destino diferente al origen en el panel lateral."
+        )
+        return
+
+    # Validar que la ponderación de criterios sea utilizable (Pesos lanza ValueError si es inválida)
+    if pesos is None:
+        st.error(
+            "La ponderación personalizada no es válida: los pesos deben ser números >= 0 y no todos cero. "
+            "Ajusta los pesos en el panel lateral."
         )
         return
 
