@@ -76,14 +76,14 @@ class RutaUrbanaApp:
         panel_principal.add(frame_izq, weight=1)
 
         # Título
-        ttk.Label(frame_izq, text="🚇 RutaUrbana A*", style="Title.TLabel").pack(anchor="w", pady=(0, 2))
+        ttk.Label(frame_izq, text="RutaUrbana A*", style="Title.TLabel").pack(anchor="w", pady=(0, 2))
         ttk.Label(frame_izq, text="Planificador multimodal en red urbana", font=("Segoe UI", 9, "italic")).pack(anchor="w", pady=(0, 12))
 
         # Sección Selección
         ttk.Label(frame_izq, text="1. Parámetros del Viaje", style="Header.TLabel").pack(anchor="w", pady=(4, 6))
 
         # Origen
-        ttk.Label(frame_izq, text="📍 Origen:").pack(anchor="w")
+        ttk.Label(frame_izq, text="Origen:").pack(anchor="w")
         self.combo_origen = ttk.Combobox(frame_izq, values=self.nodos_disponibles, state="normal")
         self.combo_origen.pack(fill=tk.X, pady=(2, 8))
         if "parque_tuchtlan" in self.nodos_disponibles:
@@ -92,7 +92,7 @@ class RutaUrbanaApp:
             self.combo_origen.set(self.nodos_disponibles[0])
 
         # Destino
-        ttk.Label(frame_izq, text="🏁 Destino:").pack(anchor="w")
+        ttk.Label(frame_izq, text="Destino:").pack(anchor="w")
         self.combo_destino = ttk.Combobox(frame_izq, values=self.nodos_disponibles, state="normal")
         self.combo_destino.pack(fill=tk.X, pady=(2, 8))
         if "plaza_las_americas" in self.nodos_disponibles:
@@ -101,21 +101,21 @@ class RutaUrbanaApp:
             self.combo_destino.set(self.nodos_disponibles[1])
 
         # Criterio de Búsqueda
-        ttk.Label(frame_izq, text="🎯 Criterio de Ponderación:").pack(anchor="w")
+        ttk.Label(frame_izq, text="Criterio de Ponderación:").pack(anchor="w")
         self.criterios = list(CRITERIOS_PREDEFINIDOS.keys())
         self.combo_criterio = ttk.Combobox(frame_izq, values=self.criterios, state="readonly")
         self.combo_criterio.set("rapida")
         self.combo_criterio.pack(fill=tk.X, pady=(2, 8))
 
         # Algoritmo
-        ttk.Label(frame_izq, text="🧠 Algoritmo de Búsqueda:").pack(anchor="w")
-        self.algos = ["A* (Recomendado)", "Dijkstra (Costo Uniforme)", "BFS (Anchura)", "⚖️ Comparar los 3"]
+        ttk.Label(frame_izq, text="Algoritmo de Búsqueda:").pack(anchor="w")
+        self.algos = ["A* (Recomendado)", "Dijkstra (Costo Uniforme)", "BFS (Anchura)", "Comparar los 3"]
         self.combo_algo = ttk.Combobox(frame_izq, values=self.algos, state="readonly")
         self.combo_algo.set("A* (Recomendado)")
         self.combo_algo.pack(fill=tk.X, pady=(2, 12))
 
         # Botón Calcular
-        btn_calcular = ttk.Button(frame_izq, text="🚀 Calcular y Cargar Ruta", style="Accent.TButton", command=self.calcular_ruta)
+        btn_calcular = ttk.Button(frame_izq, text="Calcular Ruta", style="Accent.TButton", command=self.calcular_ruta)
         btn_calcular.pack(fill=tk.X, pady=(0, 10))
 
         # Sección 2: Control de Recorrido Paso a Paso
@@ -129,8 +129,8 @@ class RutaUrbanaApp:
         frame_modo.pack(fill=tk.X, pady=(0, 4))
         ttk.Label(frame_modo, text="Modo visual:", font=("Segoe UI", 8, "bold")).pack(side=tk.LEFT)
         self.var_modo_vista = tk.StringVar(value="exploracion")
-        self.rb_viajero = ttk.Radiobutton(frame_modo, text="🚶 Viajero", value="viajero", variable=self.var_modo_vista, command=self._cambiar_modo_visual)
-        self.rb_exploracion = ttk.Radiobutton(frame_modo, text="🔍 Búsqueda IA", value="exploracion", variable=self.var_modo_vista, command=self._cambiar_modo_visual)
+        self.rb_viajero = ttk.Radiobutton(frame_modo, text="Viajero", value="viajero", variable=self.var_modo_vista, command=self._cambiar_modo_visual)
+        self.rb_exploracion = ttk.Radiobutton(frame_modo, text="Búsqueda IA", value="exploracion", variable=self.var_modo_vista, command=self._cambiar_modo_visual)
         self.rb_viajero.pack(side=tk.RIGHT, padx=2)
         self.rb_exploracion.pack(side=tk.RIGHT, padx=2)
 
@@ -182,7 +182,7 @@ class RutaUrbanaApp:
 
         # PESTAÑA 1: Plano Urbano Multimodal
         tab_mapa = ttk.Frame(self.notebook, padding="2")
-        self.notebook.add(tab_mapa, text="🗺️ Plano Urbano Multimodal")
+        self.notebook.add(tab_mapa, text="Plano Urbano Multimodal")
 
         self.fig_mapa, self.ax_mapa = plt.subplots(figsize=(7, 6))
         self.fig_mapa.tight_layout()
@@ -197,13 +197,13 @@ class RutaUrbanaApp:
 
         # PESTAÑA 2: Árbol de Búsqueda
         tab_arbol = ttk.Frame(self.notebook, padding="2")
-        self.notebook.add(tab_arbol, text="🌳 Árbol de Búsqueda (IA)")
+        self.notebook.add(tab_arbol, text="Árbol de Búsqueda (IA)")
 
         frame_header_arbol = ttk.Frame(tab_arbol, padding="6")
         frame_header_arbol.pack(fill=tk.X)
         ttk.Label(
             frame_header_arbol,
-            text="🌿 Jerarquía de Búsqueda: Verde = Rama Solución Óptima  |  Azul = Nodos Expandidos  |  Amarillo = En Frontera",
+            text="Jerarquía de Búsqueda: Verde = Rama Solución Óptima  |  Azul = Nodos Expandidos  |  Amarillo = En Frontera",
             font=("Segoe UI", 8, "bold"),
             foreground="#1565c0",
         ).pack(side=tk.LEFT)
@@ -278,6 +278,14 @@ class RutaUrbanaApp:
             messagebox.showerror("Destino no válido", f"El nodo '{destino}' no existe en el mapa.")
             return
 
+        if origen == destino:
+            messagebox.showwarning(
+                "Origen y Destino Idénticos",
+                "Regla de negocio: No se puede seleccionar una ubicación inicial como meta al mismo tiempo.\n"
+                "Por favor seleccione un punto de destino diferente al origen."
+            )
+            return
+
         pesos = CRITERIOS_PREDEFINIDOS.get(criterio, Pesos())
 
         self.txt_resultados.delete("1.0", tk.END)
@@ -294,7 +302,7 @@ class RutaUrbanaApp:
             ahorro_str = ""
             if res_astar and res_dijkstra and res_dijkstra.nodos_expandidos > 0:
                 ahorro = (1.0 - (res_astar.nodos_expandidos / res_dijkstra.nodos_expandidos)) * 100.0
-                ahorro_str = f"\n💡 Ahorro de A* vs Dijkstra: {ahorro:.1f}% menos nodos expandidos.\n"
+                ahorro_str = f"\nAhorro de A* vs Dijkstra: {ahorro:.1f}% menos nodos expandidos.\n"
 
             self.txt_resultados.insert(tk.END, texto_comp + ahorro_str)
             if res_astar:
@@ -307,7 +315,7 @@ class RutaUrbanaApp:
             func = astar if "A*" in algo_opcion else (dijkstra if "Dijkstra" in algo_opcion else bfs)
             res = func(self.grafo, origen, destino, pesos)
             if res is None:
-                self.txt_resultados.insert(tk.END, f"❌ Destino inalcanzable desde '{origen}' hacia '{destino}'.")
+                self.txt_resultados.insert(tk.END, f"Destino inalcanzable desde '{origen}' hacia '{destino}'.")
                 messagebox.showinfo("Inalcanzable", "No existe camino viable entre los nodos.")
                 self._deshabilitar_controles()
                 dibujar_arbol_en_axes(self.ax_arbol, {}, None)

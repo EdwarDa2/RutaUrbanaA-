@@ -172,3 +172,13 @@ def test_formatear_tabla_comparativa(resultado_mock):
     assert "14.50" in tabla
     assert "15" in tabla
     assert "45" in tabla
+
+
+def test_regla_negocio_origen_igual_destino(monkeypatch, capsys):
+    """Verifica que main() aplique la regla de negocio rechazando origen idéntico al destino."""
+    from main import main
+    monkeypatch.setattr("sys.argv", ["main.py", "--origen", "parque_marimba", "--destino", "parque_marimba"])
+    codigo = main()
+    assert codigo == 1
+    captured = capsys.readouterr()
+    assert "origen y de destino no pueden ser iguales" in captured.err

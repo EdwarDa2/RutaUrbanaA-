@@ -147,6 +147,7 @@ def preparar_elementos_mapa(
                     "p1": p1,
                     "p2": p2,
                     "tipo": tipo_tramo,
+                    "ruta": e_siguiente.ruta if not es_caminando else None,
                     "color": color,
                     "grosor": 4.5,
                 })

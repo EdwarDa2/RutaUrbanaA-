@@ -112,6 +112,7 @@ def test_preparar_elementos_mapa_distincion_tramos(mapa_demo_dict, resultado_dem
     tipos_solucion = [tramo["tipo"] for tramo in elementos.aristas_solucion]
     assert "CAMINANDO" in tipos_solucion
     assert "TRANSPORTE" in tipos_solucion
+    assert any(tramo.get("ruta") == "R1" for tramo in elementos.aristas_solucion)
 
     # Puntos de cambio de modalidad / transbordo detectados
     assert "parada_norte" in elementos.nodos_transbordo

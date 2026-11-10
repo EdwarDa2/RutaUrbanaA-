@@ -5,6 +5,10 @@
 # --- Visualización y gráficas (Dev B: ui/mapa.py, analytics/exportador.py) ---
 matplotlib>=3.7
 
+# --- Dashboard Web Moderno (Streamlit + Plotly) ---
+streamlit>=1.30.0
+plotly>=5.18.0
+
 # --- Pruebas ---
 pytest>=8.0
 

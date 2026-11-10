@@ -236,11 +236,15 @@ def main(argv: list[str] | None = None) -> int:
 
     # Modo búsqueda individual
     if not args.origen or not args.destino:
-        print("\n⚠️ Debe especificar --origen y --destino (o usar --casos para modo en lote).", file=sys.stderr)
+        print("\nDebe especificar --origen y --destino (o usar --casos para modo en lote).", file=sys.stderr)
         print("Ejemplo: python main.py --origen \"Biblioteca\" --destino \"Mercado\" --criterio rapida\n")
         return 1
 
-    print(f"\n🔍 Buscando ruta de '{args.origen}' a '{args.destino}' con criterio '{args.criterio}'...")
+    if args.origen == args.destino:
+        print(f"\n[Regla de Negocio] Error: El punto de origen y de destino no pueden ser iguales ('{args.origen}').", file=sys.stderr)
+        return 1
+
+    print(f"\nBuscando ruta de '{args.origen}' a '{args.destino}' con criterio '{args.criterio}'...")
     print(f"   Ponderaciones aplicadas: {pesos}")
 
     # Intentar cargar mapa y ejecutar núcleo del Dev A si ya están implementados
