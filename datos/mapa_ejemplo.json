@@ -1,0 +1,35 @@
+{
+  "nodos": [
+    {"id": "entrada",      "x": 0,   "y": 0},
+    {"id": "rampa",        "x": 100, "y": -80},
+    {"id": "biblioteca",   "x": 200, "y": 0},
+    {"id": "parada_norte", "x": 200, "y": 150},
+    {"id": "cafeteria",    "x": 400, "y": 0},
+    {"id": "parada_centro","x": 400, "y": 150},
+    {"id": "plaza",        "x": 600, "y": 0},
+    {"id": "mercado",      "x": 600, "y": 150},
+    {"id": "parada_sur",   "x": 400, "y": -150},
+    {"id": "clinica",      "x": 600, "y": -150}
+  ],
+  "tramos": [
+    {"de": "entrada",      "a": "biblioteca",   "distancia_m": 200, "penalizacion": 6, "tipo": "escalera"},
+    {"de": "entrada",      "a": "rampa",        "distancia_m": 140, "penalizacion": 0, "tipo": "rampa"},
+    {"de": "rampa",        "a": "biblioteca",   "distancia_m": 140, "penalizacion": 0, "tipo": "rampa"},
+    {"de": "biblioteca",   "a": "parada_norte", "distancia_m": 160},
+    {"de": "biblioteca",   "a": "cafeteria",    "distancia_m": 210},
+    {"de": "parada_norte", "a": "parada_centro","distancia_m": 210},
+    {"de": "cafeteria",    "a": "parada_centro","distancia_m": 160},
+    {"de": "cafeteria",    "a": "plaza",        "distancia_m": 210},
+    {"de": "cafeteria",    "a": "parada_sur",   "distancia_m": 160},
+    {"de": "plaza",        "a": "mercado",      "distancia_m": 160},
+    {"de": "parada_centro","a": "mercado",      "distancia_m": 210},
+    {"de": "parada_sur",   "a": "clinica",      "distancia_m": 210},
+    {"de": "plaza",        "a": "clinica",      "distancia_m": 160}
+  ],
+  "rutas": [
+    {"id": "R1", "tarifa": 10.0, "espera_min": 2.0,
+     "paradas": ["parada_norte", "parada_centro", "mercado"], "tiempos_min": [1.0, 1.0]},
+    {"id": "R2", "tarifa": 10.0, "espera_min": 3.0,
+     "paradas": ["parada_centro", "parada_sur", "clinica"], "tiempos_min": [1.5, 1.0]}
+  ]
+}
