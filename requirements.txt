@@ -1,0 +1,17 @@
+# RutaUrbana A* - dependencias del proyecto
+# Requiere Python 3.10 o superior.
+# Instalación:  pip install -r requirements.txt
+
+# --- Visualización y gráficas (Dev B: ui/mapa.py, analytics/exportador.py) ---
+matplotlib>=3.7
+
+# --- Pruebas ---
+pytest>=8.0
+
+# --- Opcionales (descomentar solo si se usan; hoy el proyecto NO los necesita) ---
+# folium>=0.15      # mapa interactivo en HTML (extra de ui/mapa.py)
+# osmnx>=1.9        # calles reales de OpenStreetMap (extra de datos)
+# pytest-cov>=4.1   # reporte de cobertura de pruebas
+
+# Nota: heapq, json, csv, argparse, dataclasses, math y time vienen con Python;
+# no se listan aquí.
