@@ -260,19 +260,23 @@ def main():
     elementos = preparar_elementos_mapa(grafo, resultado=res_sol)
 
     # --- 1. SECCIÓN DE MÉTRICAS (KPI CARDS) ---
-    desglose = res_sol.desglose or {}
-    tiempo_total = desglose.get("tiempo_min", 0.0)
-    dinero_total = desglose.get("dinero", 0.0)
-    transbordos_total = int(desglose.get("abordajes", 0))
+    # Acceso directo a las claves del contrato: si un nombre cambia, debe fallar a la vista.
+    tiempo_total = res_sol.desglose["tiempo"]
+    dinero_total = res_sol.desglose["dinero"]
+    penalizacion_total = res_sol.desglose["penalizacion"]
 
-    col1, col2, col3, col4 = st.columns(4)
+    sub_tiempo = "Caminata + Espera + Traslado"
+    if penalizacion_total > 0:
+        sub_tiempo = f"Penalización de accesibilidad: {penalizacion_total:.2f}"
+
+    col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
         st.markdown(
             f"""
             <div class="metric-card">
                 <div class="metric-label">Tiempo Estimado</div>
                 <div class="metric-value">{tiempo_total:.1f} min</div>
-                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Caminata + Espera + Traslado</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">{sub_tiempo}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -293,13 +297,24 @@ def main():
             f"""
             <div class="metric-card">
                 <div class="metric-label">Transbordos</div>
-                <div class="metric-value">{transbordos_total} abordaje(s)</div>
+                <div class="metric-value">{res_sol.transbordos}</div>
                 <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Cambios de modalidad</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
     with col4:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div class="metric-label">Abordajes</div>
+                <div class="metric-value">{res_sol.abordajes}</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Pagos de abordaje cobrados</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with col5:
         st.markdown(
             f"""
             <div class="metric-card">
