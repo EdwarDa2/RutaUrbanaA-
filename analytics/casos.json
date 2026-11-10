@@ -1,0 +1,131 @@
+[
+  {
+    "id": "caso_01",
+    "nombre": "Trayecto peatonal corto",
+    "origen": "biblioteca",
+    "destino": "parada_norte",
+    "tipo": "corto_caminata",
+    "descripcion": "Conexión directa entre la biblioteca y la estación norte."
+  },
+  {
+    "id": "caso_02",
+    "nombre": "Trayecto directo en transporte (Línea R1)",
+    "origen": "parada_norte",
+    "destino": "mercado",
+    "tipo": "transporte_directo",
+    "descripcion": "Viaje sin transbordos a través de la ruta R1."
+  },
+  {
+    "id": "caso_03",
+    "nombre": "Acceso a zona comercial",
+    "origen": "biblioteca",
+    "destino": "mercado",
+    "tipo": "multimodal_directo",
+    "descripcion": "Caminata inicial y abordaje de ruta R1."
+  },
+  {
+    "id": "caso_04",
+    "nombre": "Conexión este-oeste con transbordo",
+    "origen": "estacion_oeste",
+    "destino": "hospital_general",
+    "tipo": "con_transbordo",
+    "descripcion": "Requiere transbordo entre la ruta R1 y la ruta R2 en parada_centro."
+  },
+  {
+    "id": "caso_05",
+    "nombre": "Campus universitario a zona residencial",
+    "origen": "campus_norte",
+    "destino": "residencial_sur",
+    "tipo": "largo_transbordo",
+    "descripcion": "Recorrido de larga distancia cruzando dos líneas de transporte."
+  },
+  {
+    "id": "caso_06",
+    "nombre": "Sensible a Criterio: Rápida vs Barata",
+    "origen": "plaza_mayor",
+    "destino": "terminal_autobuses",
+    "tipo": "sensible_criterio",
+    "descripcion": "Existe opción rápida cara (metrobus) vs lenta barata (camión convencional)."
+  },
+  {
+    "id": "caso_07",
+    "nombre": "Sensible a Accesibilidad",
+    "origen": "parque_central",
+    "destino": "mirador_alto",
+    "tipo": "sensible_accesibilidad",
+    "descripcion": "Ruta peatonal con escaleras pronunciadas vs ruta plana con transporte accesible."
+  },
+  {
+    "id": "caso_08",
+    "nombre": "Sensible a Transbordos",
+    "origen": "estacion_tren",
+    "destino": "parque_industrial",
+    "tipo": "sensible_transbordo",
+    "descripcion": "Opción de 2 transbordos rápidos vs 1 sola ruta con mayor tiempo de espera."
+  },
+  {
+    "id": "caso_09",
+    "nombre": "Trayecto nocturno / baja frecuencia",
+    "origen": "teatro_municipal",
+    "destino": "avenida_revolucion",
+    "tipo": "medio_transporte",
+    "descripcion": "Evalúa impacto de tiempos de espera en paradas intermedias."
+  },
+  {
+    "id": "caso_10",
+    "nombre": "Conexión intermodal periferia",
+    "origen": "colonia_bosques",
+    "destino": "centro_financiero",
+    "tipo": "periferia_centro",
+    "descripcion": "Caminata larga por calles secundarias y abordaje troncal."
+  },
+  {
+    "id": "caso_11",
+    "nombre": "Centro histórico a mercado",
+    "origen": "plaza_armas",
+    "destino": "mercado",
+    "tipo": "medio_urbano",
+    "descripcion": "Alternativa de caminar 1.2 km directo o tomar ruta de transporte."
+  },
+  {
+    "id": "caso_12",
+    "nombre": "Hospital a campus sur",
+    "origen": "hospital_general",
+    "destino": "campus_sur",
+    "tipo": "medio_directo",
+    "descripcion": "Conexión a través del corredor escolar R3."
+  },
+  {
+    "id": "caso_13",
+    "nombre": "Ruta de máxima distancia urbana",
+    "origen": "portal_norte",
+    "destino": "portal_sur",
+    "tipo": "maxima_distancia",
+    "descripcion": "Prueba de esfuerzo para evaluar ramificación y frontera de búsqueda."
+  },
+  {
+    "id": "caso_14",
+    "nombre": "Micro-traslado interparadas",
+    "origen": "parada_centro",
+    "destino": "parada_sur",
+    "tipo": "micro_traslado",
+    "descripcion": "Distancia caminable de 300 metros evaluada contra costo de tarifa."
+  },
+  {
+    "id": "caso_15",
+    "nombre": "Acceso a área deportiva",
+    "origen": "polideportivo",
+    "destino": "estacion_oeste",
+    "tipo": "multimodal_medio",
+    "descripcion": "Trayecto combinando tramos peatonales y transporte troncal."
+  },
+  {
+    "id": "caso_16",
+    "nombre": "Conexión aeroportuaria / suburbana",
+    "origen": "terminal_suburbana",
+    "destino": "plaza_mayor",
+    "tipo": "largo_expreso",
+    "descripcion": "Línea rápida con pocas paradas frente a líneas locales con muchas paradas."
+  }
+]
+

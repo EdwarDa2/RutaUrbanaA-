@@ -1,0 +1,41 @@
+# --- Entorno virtual (cada quien crea el suyo con requirements.txt) ---
+venv/
+.venv/
+env/
+
+# --- Archivos generados por Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# --- Cachés y reportes de herramientas ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# --- Salidas que el programa genera al ejecutarse ---
+# (CSV, JSON y gráficas de los experimentos; se regeneran con el código)
+resultados/
+output/
+
+# --- Imágenes sueltas ignoradas, salvo las del reporte ---
+*.png
+*.svg
+!docs/*.png
+!docs/*.svg
+
+# --- Secretos y configuración local ---
+.env
+
+# --- Editor y sistema operativo ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Documentación interna / contexto ---
+contexto/
+
