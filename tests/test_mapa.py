@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import NamedTuple
 import pytest
 
-from ui.mapa import preparar_elementos_mapa, generar_mapa
+from ui.mapa import preparar_elementos_mapa, generar_mapa, dibujar_paso_busqueda_en_mapa
 
 
 class EstadoMock(NamedTuple):
@@ -142,4 +142,29 @@ def test_generar_mapa_png(tmp_path, mapa_demo_dict, resultado_demo):
 
     assert salida_png.exists()
     assert salida_png.stat().st_size > 1000  # PNG real con contenido gráfico
+
+
+def test_dibujar_paso_busqueda_en_mapa(mapa_demo_dict):
+    """Verifica que dibujar_paso_busqueda_en_mapa renderice sobre un Axes sin lanzar excepciones."""
+    import matplotlib.pyplot as plt
+    from dataclasses import dataclass
+
+    @dataclass
+    class PasoMock:
+        num_paso: int = 1
+        nodo_actual: str = "biblioteca"
+        f: float = 12.0
+        g: float = 5.0
+        h: float = 7.0
+        nodos_cerrados: set = None
+        nodos_frontera: set = None
+        aristas_exploradas: list = None
+        es_meta: bool = False
+
+    elementos = preparar_elementos_mapa(mapa_demo_dict)
+    paso = PasoMock(nodos_cerrados={"biblioteca"}, nodos_frontera={"parada_norte"}, aristas_exploradas=[("biblioteca", "parada_norte")])
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    dibujar_paso_busqueda_en_mapa(ax, elementos, paso, total_pasos=5, algoritmo="A*")
+    plt.close(fig)
 

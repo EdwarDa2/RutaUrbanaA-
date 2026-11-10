@@ -147,7 +147,11 @@ def formatear_itinerario(resultado: Any) -> str:
 
     lineas = ["\n📍 ITINERARIO PASO A PASO:"]
     for i, accion in enumerate(resultado.acciones, start=1):
-        lineas.append(f"  {i}. {accion.descripcion} [Costo tramo: {accion.costo:.2f}]")
+        if hasattr(accion, "descripcion"):
+            costo_str = f" [Costo tramo: {accion.costo:.2f}]" if hasattr(accion, "costo") and isinstance(accion.costo, (int, float)) else ""
+            lineas.append(f"  {i}. {accion.descripcion}{costo_str}")
+        else:
+            lineas.append(f"  {i}. {str(accion)}")
     return "\n".join(lineas)
 
 

@@ -63,7 +63,92 @@ RutaUrbanaA-/
 
 ---
 
-## 🚀 Guía de Uso del CLI (`main.py`)
+## 🖥️ Formas Sencillas de Ejecutar la Aplicación
+
+El proyecto ofrece múltiples opciones pensadas para que cualquier evaluador, docente o usuario pueda ejecutarlo de inmediato sin complicaciones técnicas:
+
+### ⚡ Opción 1: Un solo clic (Recomendada para Evaluación)
+Haz doble clic sobre el archivo ejecutable por lotes:
+```text
+ejecutar_interfaz.bat
+```
+> **¿Qué hace automáticamente?**
+> * Detecta tu instalación de Python (`python` o `py`).
+> * Comprueba e instala automáticamente las librerías necesarias (`matplotlib`, `pytest`) si hicieran falta.
+> * Inicia la interfaz gráfica de inmediato.
+
+---
+
+### 🪟 Opción 2: Modo silencioso sin ventana de consola
+Si prefieres que la aplicación se abra directamente como un software de escritorio nativo (sin la ventana negra de CMD de fondo):
+```text
+ejecutar_sin_consola.vbs
+```
+*(Haz doble clic sobre este archivo en el Explorador de Windows).*
+
+---
+
+### 📦 Opción 3: Generar un Ejecutable Autónomo Windows (.EXE)
+Si deseas generar un archivo `.exe` totalmente independiente para compartirlo o ejecutarlo en cualquier computadora sin necesidad de tener Python instalado:
+1. Haz doble clic sobre:
+   ```text
+   crear_ejecutable.bat
+   ```
+2. El script compilará automáticamente el proyecto y creará el ejecutable en:
+   ```text
+   dist\RutaUrbanaAstar\RutaUrbanaAstar.exe
+   ```
+
+---
+
+### 💻 Opción 4: Desde la Terminal o PowerShell
+Si prefieres iniciar la interfaz visual por consola de comandos:
+```bash
+# Situarse en la carpeta del proyecto
+cd RutaUrbanaA-
+
+# Iniciar la interfaz gráfica
+python app.py
+```
+
+---
+
+## 🎮 Guía de Uso de la Interfaz Visual
+
+La interfaz está dividida en dos paneles principales:
+
+### 1. Panel Izquierdo: Configuración y Controles
+* **1. Parámetros de Ruta:**
+  * **Origen y Destino:** Elige entre los 46 puntos reales georreferenciados de Tuxtla Gutiérrez (ej. *Parque de la Marimba*, *Catedral de San Marcos*, *Plaza Crystal*, *UNACH*).
+  * **Criterio de Optimización:**
+    * `rapida`: Minimiza tiempo de viaje total.
+    * `barata`: Minimiza costos y pasajes de transporte.
+    * `pocos-transbordos`: Penaliza cambios de línea o abordajes repetidos.
+    * `accesible`: Evita tramos con barreras físicas o pendientes.
+  * **Algoritmo:** Selecciona $A^*$, Dijkstra, BFS o **Comparar Todos** para ver un análisis comparativo en tabla.
+  * **Botón "Calcular Ruta":** Ejecuta los algoritmos instantáneamente.
+
+* **2. Reproducción y Análisis IA (Paso a Paso):**
+  * **Selector de Modo:**
+    * `🔍 Búsqueda IA`: Muestra cómo el algoritmo razona y explora la ciudad, marcando en **ámbar** los nodos en la frontera (cola de prioridad), en **azul** los nodos explorados (cerrados) y en **amarillo/carmesí** el nodo actual con su costo $f(n) = g(n) + h(n)$.
+    * `🚶 Viajero`: Muestra el viaje físico por la ruta resultante (tramos a pie en verde y transporte público en azul).
+  * **Botonera de Control:**
+    * `⏮` / `⏭`: Avanzar o retroceder paso a paso.
+    * `▶ Animar` / `⏸ Pausar`: Reproducción automática continua.
+    * `⚡ Completo`: Salta directamente al estado final completado.
+    * `↺`: Reinicia la animación al inicio.
+    * **Velocidad:** Configurable entre Rápida (300 ms), Normal (700 ms) y Lenta (1200 ms).
+
+* **3. Itinerario y Métricas:**
+  * Muestra el desglose detallado de cada acción del viaje, tiempos, costos, transbordos y el ahorro porcentual de nodos expandidos de $A^*$ frente a Dijkstra.
+
+### 2. Panel Derecho: Pestañas Interactivas
+* **🗺️ Plano Urbano Multimodal:** Mapa interactivo con nombres legibles anticolisión, tramos coloreados y barra de zoom/desplazamiento.
+* **🌳 Árbol de Búsqueda (IA):** Diagrama jerárquico de exploración donde se aprecia el árbol completo de búsqueda con la **rama de solución óptima ganadora en verde esmeralda** y las ramas descartadas en azul/amarillo, acompañadas de sus valores $f = g + h$.
+
+---
+
+## 🚀 Guía de Uso del CLI por Terminal (`main.py`)
 
 El punto de entrada principal es `main.py`, que ofrece múltiples opciones de consulta:
 
