@@ -12,7 +12,7 @@ import streamlit as st
 from core.algoritmos import astar
 from core.tipos import Pesos
 from datos.cargador import cargar_mapa
-from main import CRITERIOS_PREDEFINIDOS, formatear_itinerario
+from main import CRITERIOS_PREDEFINIDOS
 from ui.arbol import extraer_arbol_y_pasos
 from ui.mapa import preparar_elementos_mapa, formatear_nombre_nodo
 from ui.web_visualizador import (
@@ -423,8 +423,42 @@ def main():
     # --- PESTAÑA 3: ITINERARIO DETALLADO ---
     with tab_itinerario:
         st.markdown(f"### Itinerario Detallado: {formatear_nombre_nodo(origen)} hacia {formatear_nombre_nodo(destino)}")
-        texto_itinerario = formatear_itinerario(res_sol)
-        st.text_area("Desglose de acciones:", value=texto_itinerario, height=340)
+
+        if not res_sol.acciones:
+            st.info("El origen y el destino son el mismo punto: no hay tramos que recorrer.")
+        else:
+            for i, accion in enumerate(res_sol.acciones, start=1):
+                st.markdown(
+                    f"""
+                    <div class="metric-card" style="margin-bottom: 8px;">
+                        <div style="font-size: 13.5px; font-weight: 600; color: #e2e8f0;">
+                            Paso {i}. {str(accion)}
+                        </div>
+                        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                            Tiempo: <b>{accion.tiempo_min:.2f} min</b> &nbsp;|&nbsp;
+                            Dinero: <b>${accion.dinero:.2f} MXN</b> &nbsp;|&nbsp;
+                            Penalización: <b>{accion.penalizacion:.2f}</b>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            total_tiempo_it = sum(a.tiempo_min for a in res_sol.acciones)
+            total_dinero_it = sum(a.dinero for a in res_sol.acciones)
+            total_penalizacion_it = sum(a.penalizacion for a in res_sol.acciones)
+            st.markdown(
+                f"""
+                <div class="metric-card" style="border-color: #3b82f6;">
+                    <div class="metric-label">Totales del Itinerario</div>
+                    <div class="metric-value">{total_tiempo_it:.1f} min &nbsp;·&nbsp; ${total_dinero_it:.2f} MXN</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                        Penalización de accesibilidad acumulada: {total_penalizacion_it:.2f}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 if __name__ == "__main__":
