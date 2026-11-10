@@ -8,18 +8,17 @@ from __future__ import annotations
 
 import os
 import streamlit as st
-import pandas as pd
 
-from core.algoritmos import astar, dijkstra, bfs
+from core.algoritmos import astar
 from core.tipos import Pesos, ResultadoBusqueda
 from datos.cargador import cargar_mapa
-from main import CRITERIOS_PREDEFINIDOS, formatear_itinerario
+from main import CRITERIOS_PREDEFINIDOS
 from ui.arbol import extraer_arbol_y_pasos
 from ui.mapa import preparar_elementos_mapa, formatear_nombre_nodo
 from ui.web_visualizador import (
     crear_figura_mapa_plotly,
     crear_figura_arbol_plotly,
-    crear_grafica_comparativa_plotly,
+    formatear_nombre_ruta,
 )
 
 
@@ -178,27 +177,34 @@ def main():
             format_func=lambda k: opciones_criterio[k],
         )
 
+        pesos = None
         if criterio_key == "personalizado":
             st.markdown("##### Ajuste de Pesos:")
             w_tiempo = st.slider("Peso Tiempo (w1)", 0.0, 5.0, 1.0, 0.1)
             w_dinero = st.slider("Peso Dinero (w2)", 0.0, 5.0, 0.5, 0.1)
             w_transbordos = st.slider("Peso Transbordos (w3)", 0.0, 5.0, 2.0, 0.1)
             w_accesible = st.slider("Peso Accesibilidad (w4)", 0.0, 5.0, 0.5, 0.1)
-            pesos = Pesos(tiempo=w_tiempo, dinero=w_dinero, abordaje=w_transbordos, accesibilidad=w_accesible)
+            try:
+                pesos = Pesos(tiempo=w_tiempo, dinero=w_dinero, abordaje=w_transbordos, accesibilidad=w_accesible)
+            except ValueError as error:
+                st.error(f"Pesos inválidos: {error}")
         else:
             pesos = CRITERIOS_PREDEFINIDOS.get(criterio_key, Pesos())
 
         st.markdown("<div style='margin-top: 0.8rem;'></div>", unsafe_allow_html=True)
 
-        # 3. Algoritmo
+        # 3. Algoritmo de Búsqueda (Fijo en A*)
         st.markdown("### Algoritmo de Búsqueda")
-        opciones_algo = [
-            "A* (Heurística Admisible)",
-            "Dijkstra (Costo Uniforme)",
-            "BFS (Anchura)",
-            "Comparar los 3 Algoritmos",
-        ]
-        algo_seleccionado = st.radio("Selecciona algoritmo:", opciones_algo, index=0)
+        st.markdown(
+            """
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 10px 12px; margin-bottom: 0.5rem;">
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #10b981; font-weight: 700;">Motor Activo</div>
+                <div style="font-size: 14px; font-weight: 600; color: #f8fafc; margin-top: 2px;">Algoritmo A*</div>
+                <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">Búsqueda informada óptima con heurística euclidiana admisible</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         st.markdown("<div style='margin-top: 1.0rem;'></div>", unsafe_allow_html=True)
         btn_calcular = st.button("Calcular Ruta Óptima", type="primary", width="stretch", disabled=puntos_iguales)
@@ -211,6 +217,14 @@ def main():
         )
         return
 
+    # Validar que la ponderación de criterios sea utilizable
+    if pesos is None:
+        st.error(
+            "La ponderación personalizada no es válida: los pesos deben ser números >= 0 y no todos cero. "
+            "Ajusta los pesos en el panel lateral."
+        )
+        return
+
     # Si se cambiaron los puntos respecto a un cálculo anterior, invalidar resultado previo
     if "resultado_guardado" in st.session_state and not btn_calcular:
         guardado = st.session_state["resultado_guardado"]
@@ -219,29 +233,16 @@ def main():
 
     # Estado de sesión para persistir resultados al presionar el botón o mover el slider interactivo
     if btn_calcular:
-        algo_efectivo = "A*" if ("A*" in algo_seleccionado or "Comparar" in algo_seleccionado) else ("Dijkstra" if "Dijkstra" in algo_seleccionado else "BFS")
-        func_algo = astar if algo_efectivo == "A*" else (dijkstra if algo_efectivo == "Dijkstra" else bfs)
-
-        res_sol = func_algo(grafo, origen, destino, pesos)
-        nodos_arbol, raiz_id, pasos_exp = extraer_arbol_y_pasos(grafo, origen, destino, pesos, algo_efectivo)
-
-        res_comparativa = []
-        if "Comparar" in algo_seleccionado:
-            res_a = astar(grafo, origen, destino, pesos)
-            res_d = dijkstra(grafo, origen, destino, pesos)
-            res_b = bfs(grafo, origen, destino, pesos)
-            res_comparativa = [r for r in [res_a, res_d, res_b] if r is not None]
+        res_sol = astar(grafo, origen, destino, pesos)
+        nodos_arbol, raiz_id, pasos_exp = extraer_arbol_y_pasos(grafo, origen, destino, pesos, "A*")
 
         st.session_state["resultado_guardado"] = {
             "res_sol": res_sol,
             "nodos_arbol": nodos_arbol,
             "raiz_id": raiz_id,
             "pasos_exp": pasos_exp,
-            "res_comp": res_comparativa,
             "origen": origen,
             "destino": destino,
-            "algo_efectivo": algo_efectivo,
-            "algo_seleccionado": algo_seleccionado,
             "pesos": pesos,
         }
 
@@ -249,7 +250,7 @@ def main():
     if "resultado_guardado" not in st.session_state:
         st.info(
             "Configura el origen, destino y criterios en el panel lateral y presiona "
-            "**Calcular Ruta Óptima** para ejecutar los algoritmos y visualizar el recorrido paso a paso."
+            "**Calcular Ruta Óptima** para ejecutar el algoritmo A* y visualizar el recorrido paso a paso."
         )
         elementos_base = preparar_elementos_mapa(grafo)
         elementos_base.origen_id = origen
@@ -268,9 +269,6 @@ def main():
     nodos_arbol = datos_sesion["nodos_arbol"]
     raiz_id = datos_sesion["raiz_id"]
     pasos_exp = datos_sesion["pasos_exp"]
-    res_comparativa = datos_sesion["res_comp"]
-    algo_efectivo = datos_sesion["algo_efectivo"]
-    algo_seleccionado = datos_sesion["algo_seleccionado"]
 
     if res_sol is None:
         st.error(f"No existe una ruta viable entre {formatear_nombre_nodo(origen)} y {formatear_nombre_nodo(destino)} con los criterios seleccionados.")
@@ -281,27 +279,22 @@ def main():
 
     # --- 1. SECCIÓN DE MÉTRICAS (KPI CARDS) ---
     desglose = res_sol.desglose or {}
-    tiempo_total = desglose.get("tiempo_min", 0.0)
+    tiempo_total = desglose.get("tiempo", desglose.get("tiempo_min", 0.0))
     dinero_total = desglose.get("dinero", 0.0)
-    transbordos_total = int(desglose.get("abordajes", 0))
+    penalizacion_total = desglose.get("penalizacion", 0.0)
 
-    # Ahorro vs Dijkstra
-    ahorro_nodos_str = ""
-    if res_comparativa:
-        dijk_r = next((r for r in res_comparativa if r.algoritmo == "Dijkstra"), None)
-        astar_r = next((r for r in res_comparativa if r.algoritmo == "A*"), None)
-        if dijk_r and astar_r and dijk_r.nodos_expandidos > 0:
-            ahorro_val = (1.0 - (astar_r.nodos_expandidos / dijk_r.nodos_expandidos)) * 100.0
-            ahorro_nodos_str = f"{ahorro_val:.1f}% menos nodos que Dijkstra"
+    sub_tiempo = "Caminata + Espera + Traslado"
+    if penalizacion_total > 0:
+        sub_tiempo = f"Penalización accesibilidad: {penalizacion_total:.2f}"
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
         st.markdown(
             f"""
             <div class="metric-card">
                 <div class="metric-label">Tiempo Estimado</div>
                 <div class="metric-value">{tiempo_total:.1f} min</div>
-                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Caminata + Espera + Traslado</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">{sub_tiempo}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -322,7 +315,7 @@ def main():
             f"""
             <div class="metric-card">
                 <div class="metric-label">Transbordos</div>
-                <div class="metric-value">{transbordos_total} abordaje(s)</div>
+                <div class="metric-value">{res_sol.transbordos}</div>
                 <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Cambios de modalidad</div>
             </div>
             """,
@@ -332,9 +325,20 @@ def main():
         st.markdown(
             f"""
             <div class="metric-card">
-                <div class="metric-label">Nodos Expandidos ({algo_efectivo})</div>
+                <div class="metric-label">Abordajes</div>
+                <div class="metric-value">{res_sol.abordajes}</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Cobros de abordaje</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with col5:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div class="metric-label">Nodos Expandidos (A*)</div>
                 <div class="metric-value">{res_sol.nodos_expandidos}</div>
-                <div class="metric-delta">{ahorro_nodos_str or f'{res_sol.nodos_generados} generados'}</div>
+                <div class="metric-delta">{res_sol.nodos_generados} generados</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -343,10 +347,9 @@ def main():
     st.markdown("<div style='margin-top: 1.2rem;'></div>", unsafe_allow_html=True)
 
     # --- PESTAÑAS PRINCIPALES SIN EMOJIS ---
-    tab_mapa, tab_arbol, tab_comp, tab_itinerario = st.tabs([
+    tab_mapa, tab_arbol, tab_itinerario = st.tabs([
         "Plano Urbano Interactivo",
         "Árbol de Búsqueda (IA)",
-        "Comparativa de Rendimiento",
         "Itinerario Detallado",
     ])
 
@@ -418,7 +421,7 @@ def main():
                 tr_act = elementos.aristas_solucion[paso_slider - 1]
                 nom_dest_tramo = formatear_nombre_nodo(tr_act["destino"])
                 id_ruta = tr_act.get("ruta")
-                medio_str = "a pie" if tr_act.get("tipo") == "CAMINANDO" else (f"en transporte ({id_ruta})" if id_ruta else "en transporte público")
+                medio_str = "a pie" if tr_act.get("tipo") == "CAMINANDO" else (f"en {formatear_nombre_ruta(id_ruta)}" if id_ruta else "en transporte público")
                 msg_step = f"<b>Paso {paso_slider} de {total_pasos}:</b> Avanzando hacia <b>{nom_dest_tramo}</b> ({medio_str})."
             st.markdown(f"<div class='step-banner'>{msg_step}</div>", unsafe_allow_html=True)
             fig_mapa = crear_figura_mapa_plotly(
@@ -443,44 +446,48 @@ def main():
             """,
             unsafe_allow_html=True,
         )
-        fig_arbol = crear_figura_arbol_plotly(nodos_arbol, raiz_id, algoritmo=algo_efectivo)
+        fig_arbol = crear_figura_arbol_plotly(nodos_arbol, raiz_id, algoritmo="A*")
         st.plotly_chart(fig_arbol, width="stretch")
 
-    # --- PESTAÑA 3: COMPARATIVA Y RENDIMIENTO ---
-    with tab_comp:
-        if res_comparativa:
-            st.markdown("### Comparativa de Algoritmos sobre el Mismo Problema")
-            col_bar, col_tab = st.columns([1.2, 1])
-
-            with col_bar:
-                fig_barras = crear_grafica_comparativa_plotly(res_comparativa)
-                st.plotly_chart(fig_barras, width="stretch")
-
-            with col_tab:
-                st.markdown("#### Tabla de Desempeño")
-                filas_tabla = []
-                for r in res_comparativa:
-                    filas_tabla.append({
-                        "Algoritmo": r.algoritmo,
-                        "Costo Total": f"{r.costo_total:.2f}",
-                        "Expandidos": r.nodos_expandidos,
-                        "Generados": r.nodos_generados,
-                        "Frontera Máx": r.frontera_max,
-                        "Tiempo (ms)": f"{r.tiempo_ms:.3f}",
-                    })
-                df_comp = pd.DataFrame(filas_tabla)
-                st.dataframe(df_comp, hide_index=True, width="stretch")
-
-                if ahorro_nodos_str:
-                    st.success(f"Conclusión: {ahorro_nodos_str}. La función heurística admisible de A* poda eficazmente ramas subóptimas garantizando optimalidad idéntica a Dijkstra con una fracción del esfuerzo computacional.")
-        else:
-            st.info("Para visualizar la comparativa de barras en tiempo real, selecciona la opción 'Comparar los 3 Algoritmos' en el panel lateral.")
-
-    # --- PESTAÑA 4: ITINERARIO DETALLADO ---
+    # --- PESTAÑA 3: ITINERARIO DETALLADO ---
     with tab_itinerario:
         st.markdown(f"### Itinerario Detallado: {formatear_nombre_nodo(origen)} hacia {formatear_nombre_nodo(destino)}")
-        texto_itinerario = formatear_itinerario(res_sol)
-        st.text_area("Desglose de acciones:", value=texto_itinerario, height=340)
+
+        if not res_sol.acciones:
+            st.info("El origen y el destino son el mismo punto: no hay tramos que recorrer.")
+        else:
+            for i, accion in enumerate(res_sol.acciones, start=1):
+                st.markdown(
+                    f"""
+                    <div class="metric-card" style="margin-bottom: 8px;">
+                        <div style="font-size: 13.5px; font-weight: 600; color: #e2e8f0;">
+                            Paso {i}. {str(accion)}
+                        </div>
+                        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                            Tiempo: <b>{accion.tiempo_min:.2f} min</b> &nbsp;|&nbsp;
+                            Dinero: <b>${accion.dinero:.2f} MXN</b> &nbsp;|&nbsp;
+                            Penalización: <b>{accion.penalizacion:.2f}</b>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            total_tiempo_it = sum(a.tiempo_min for a in res_sol.acciones)
+            total_dinero_it = sum(a.dinero for a in res_sol.acciones)
+            total_penalizacion_it = sum(a.penalizacion for a in res_sol.acciones)
+            st.markdown(
+                f"""
+                <div class="metric-card" style="border-color: #3b82f6; margin-top: 12px;">
+                    <div class="metric-label">Totales del Itinerario</div>
+                    <div class="metric-value">{total_tiempo_it:.1f} min &nbsp;·&nbsp; ${total_dinero_it:.2f} MXN</div>
+                    <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                        Penalización de accesibilidad acumulada: {total_penalizacion_it:.2f}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 if __name__ == "__main__":

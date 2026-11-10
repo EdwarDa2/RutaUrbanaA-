@@ -12,6 +12,7 @@ from ui.web_visualizador import (
     crear_figura_mapa_plotly,
     crear_figura_arbol_plotly,
     crear_grafica_comparativa_plotly,
+    formatear_nombre_ruta,
 )
 
 
@@ -79,3 +80,10 @@ def test_crear_grafica_comparativa_plotly():
 
     fig = crear_grafica_comparativa_plotly([res1, res2])
     assert isinstance(fig, go.Figure)
+
+
+def test_formatear_nombre_ruta():
+    assert formatear_nombre_ruta("ruta_1_belisario_ida") == "R1 Belisario (ida)"
+    assert formatear_nombre_ruta("linea_2_centro_vuelta") == "R2 Centro (vuelta)"
+    assert formatear_nombre_ruta("colectivo_4") == "Colectivo 4"
+    assert formatear_nombre_ruta("") == ""

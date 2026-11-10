@@ -87,6 +87,25 @@ def transformar_coordenadas(
     return {nid: (round(p[0], 2), round(p[1], 2)) for nid, p in pos_vis.items()}
 
 
+def formatear_nombre_ruta(rid: str) -> str:
+    """Convierte 'ruta_1_belisario_ida' en 'R1 Belisario (ida)' para la leyenda legible."""
+    if not rid:
+        return ""
+    tokens = [t for t in str(rid).replace("-", "_").split("_") if t]
+    if not tokens:
+        return str(rid)
+    etiqueta = ""
+    resto = tokens
+    if len(tokens) >= 2 and tokens[0].lower() in ("ruta", "linea", "línea", "r"):
+        etiqueta = f"R{tokens[1]}"
+        resto = tokens[2:]
+    partes = []
+    for t in resto:
+        partes.append(f"({t.lower()})" if t.lower() in ("ida", "vuelta", "regreso") else t.capitalize())
+    texto = f"{etiqueta} {' '.join(partes)}".strip()
+    return texto or str(rid)
+
+
 def crear_figura_mapa_plotly(
     elementos: ElementosMapa,
     modo: str = "viajero",
@@ -132,6 +151,7 @@ def crear_figura_mapa_plotly(
             p2_v = coord_map.get(p2, (p2[0], p2[1] * factor_separacion_y))
             rx.extend([p1_v[0], p2_v[0], None])
             ry.extend([p2_v[1], p2_v[1], None])
+        nombre_ruta = formatear_nombre_ruta(rid)
         fig.add_trace(
             go.Scatter(
                 x=rx,
@@ -140,8 +160,8 @@ def crear_figura_mapa_plotly(
                 line=dict(color=col, width=2.8),
                 opacity=0.35,
                 hoverinfo="text",
-                hovertext=f"Ruta de Transporte: {rid}",
-                name=f"Ruta {rid}",
+                hovertext=f"Ruta de Transporte: {nombre_ruta}",
+                name=nombre_ruta,
                 showlegend=True,
             )
         )
@@ -349,7 +369,29 @@ def crear_figura_mapa_plotly(
             )
         )
 
-    # 7. Marcador interactivo del paso actual sin emojis
+    # 7. Símbolos sobre los nodos donde hay ABORDAR o TRANSBORDAR
+    if modo == "viajero" and elementos.nodos_transbordo:
+        tb_x, tb_y, tb_hover = [], [], []
+        for nid in elementos.nodos_transbordo:
+            if nid in pos_vis:
+                px, py = pos_vis[nid]
+                tb_x.append(px)
+                tb_y.append(py)
+                tb_hover.append(f"<b>{formatear_nombre_nodo(nid)}</b><br>Abordaje / Transbordo")
+        if tb_x:
+            fig.add_trace(
+                go.Scatter(
+                    x=tb_x,
+                    y=tb_y,
+                    mode="markers",
+                    marker=dict(color=COLOR_FRONTERA, size=15, symbol="diamond", line=dict(color="white", width=2)),
+                    name="Abordaje / Transbordo",
+                    hoverinfo="text",
+                    hovertext=tb_hover,
+                )
+            )
+
+    # 8. Marcador interactivo del paso actual sin emojis
     if modo == "viajero" and nodo_viajero and nodo_viajero in pos_vis:
         vx, vy = pos_vis[nodo_viajero]
         nom_v = formatear_nombre_nodo(nodo_viajero)
