@@ -1,0 +1,96 @@
+{
+  "rutas": [
+    {
+      "id": "ruta_1_poniente_economica",
+      "tarifa": 10.0,
+      "espera_min": 5,
+      "paradas": [
+        "interseccion_teran_norte_03",
+        "interseccion_teran_norte_01",
+        "interseccion_teran_norte_02",
+        "parque_tuchtlan",
+        "parque_joyyo_mayu",
+        "parque_cana_hueca",
+        "plaza_santa_elena",
+        "plaza_del_sol",
+        "parada_bicentenario_norte",
+        "parque_bicentenario",
+        "parada_central"
+      ],
+      "tiempos_min": [
+        1.0,
+        1.0,
+        1.5,
+        1.0,
+        1.0,
+        1.5,
+        1.5,
+        1.0,
+        1.5,
+        1.5
+      ]
+    },
+    {
+      "id": "ruta_2_belisario_expreso",
+      "tarifa": 12.0,
+      "espera_min": 3,
+      "paradas": [
+        "interseccion_teran_norte_03",
+        "interseccion_unach_fca_norte",
+        "interseccion_ciro_farrera_norte",
+        "parque_cana_hueca",
+        "plaza_santa_elena",
+        "plaza_del_sol",
+        "blvd_belisario_poniente",
+        "parque_bicentenario",
+        "parada_central"
+      ],
+      "tiempos_min": [
+        1.0,
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.0,
+        1.5,
+        1.5
+      ]
+    },
+    {
+      "id": "ruta_3_centro_sur",
+      "tarifa": 10.0,
+      "espera_min": 4,
+      "paradas": [
+        "parque_bicentenario",
+        "parada_central",
+        "interseccion_avenida_central_sur",
+        "parque_deportivo_poniente",
+        "interseccion_12_poniente_sur"
+      ],
+      "tiempos_min": [
+        1.5,
+        2.0,
+        1.0,
+        1.5
+      ]
+    },
+    {
+      "id": "ruta_4_plaza_crystal_feeder",
+      "tarifa": 9.0,
+      "espera_min": 4,
+      "paradas": [
+        "interseccion_12_poniente_sur",
+        "interseccion_15_poniente_sur",
+        "interseccion_ciro_farrera_belisario",
+        "parada_plaza_crystal_sur",
+        "acceso_unach_campus_i"
+      ],
+      "tiempos_min": [
+        1.5,
+        1.5,
+        2.0,
+        1.5
+      ]
+    }
+  ]
+}

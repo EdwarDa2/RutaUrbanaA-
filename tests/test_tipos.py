@@ -153,7 +153,3 @@ def test_las_tres_funciones_tienen_la_misma_firma():
     assert firmas[0] == firmas[1] == firmas[2] == ["grafo", "origen", "destino", "pesos"]
 
 
-@pytest.mark.parametrize("funcion", FUNCIONES)
-def test_los_esqueletos_avisan_que_faltan(funcion):
-    with pytest.raises(NotImplementedError):
-        funcion(None, "A", "B", Pesos())

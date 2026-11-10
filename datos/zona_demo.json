@@ -1,0 +1,831 @@
+{
+  "nodos": [
+    {
+      "id": "interseccion_teran_norte_01",
+      "x": -3564.5,
+      "y": 700.0
+    },
+    {
+      "id": "interseccion_teran_norte_02",
+      "x": -3181.8,
+      "y": 700.0
+    },
+    {
+      "id": "parque_tuchtlan",
+      "x": -2600.0,
+      "y": 700.0
+    },
+    {
+      "id": "parque_joyyo_mayu",
+      "x": -2176.6,
+      "y": 652.2
+    },
+    {
+      "id": "plaza_las_americas",
+      "x": -1450.0,
+      "y": 700.0
+    },
+    {
+      "id": "interseccion_5a_norte_poniente_01",
+      "x": -900.0,
+      "y": 700.0
+    },
+    {
+      "id": "parque_juventud_norte",
+      "x": -467.4,
+      "y": 700.0
+    },
+    {
+      "id": "parada_marimba_norte",
+      "x": 0.0,
+      "y": 700.0
+    },
+    {
+      "id": "interseccion_11a_oriente_norte",
+      "x": 848.5,
+      "y": 700.0
+    },
+    {
+      "id": "interseccion_teran_norte_03",
+      "x": -3564.5,
+      "y": 350.0
+    },
+    {
+      "id": "interseccion_unach_fca_norte",
+      "x": -3181.8,
+      "y": 350.0
+    },
+    {
+      "id": "interseccion_ciro_farrera_norte",
+      "x": -2600.0,
+      "y": 350.0
+    },
+    {
+      "id": "parque_cana_hueca",
+      "x": -2027.4,
+      "y": 294.0
+    },
+    {
+      "id": "plaza_santa_elena",
+      "x": -1450.0,
+      "y": 350.0
+    },
+    {
+      "id": "plaza_del_sol",
+      "x": -900.0,
+      "y": 350.0
+    },
+    {
+      "id": "parada_bicentenario_norte",
+      "x": -467.4,
+      "y": 350.0
+    },
+    {
+      "id": "parque_juventud_poniente",
+      "x": 0.0,
+      "y": 350.0
+    },
+    {
+      "id": "palacio_gobierno_norte",
+      "x": 848.5,
+      "y": 350.0
+    },
+    {
+      "id": "interseccion_blvd_belisario_unach",
+      "x": -3564.5,
+      "y": 0.0
+    },
+    {
+      "id": "parada_unach_belisario",
+      "x": -3181.8,
+      "y": 0.0
+    },
+    {
+      "id": "parada_crystal_norte",
+      "x": -2850.0,
+      "y": -200.0
+    },
+    {
+      "id": "estacionamiento_cana_hueca",
+      "x": -2071.1,
+      "y": 233.2
+    },
+    {
+      "id": "interseccion_12_poniente_belisario",
+      "x": -1450.0,
+      "y": 0.0
+    },
+    {
+      "id": "blvd_belisario_poniente",
+      "x": -900.0,
+      "y": 0.0
+    },
+    {
+      "id": "parque_bicentenario",
+      "x": -467.4,
+      "y": -122.0
+    },
+    {
+      "id": "parque_marimba",
+      "x": 0.0,
+      "y": 0.0
+    },
+    {
+      "id": "parada_catedral_norte",
+      "x": 848.5,
+      "y": 60.0
+    },
+    {
+      "id": "rectoria_unach",
+      "x": -3564.5,
+      "y": -185.7
+    },
+    {
+      "id": "facultad_contaduria_unach",
+      "x": -3181.8,
+      "y": -289.6
+    },
+    {
+      "id": "plaza_crystal",
+      "x": -2796.0,
+      "y": -222.2
+    },
+    {
+      "id": "interseccion_ciro_farrera_belisario",
+      "x": -2027.4,
+      "y": -250.0
+    },
+    {
+      "id": "interseccion_15_poniente_belisario",
+      "x": -1450.0,
+      "y": -250.0
+    },
+    {
+      "id": "interseccion_bicentenario_sur",
+      "x": -900.0,
+      "y": -250.0
+    },
+    {
+      "id": "parada_central",
+      "x": 0.0,
+      "y": -250.0
+    },
+    {
+      "id": "museo_de_la_marimba",
+      "x": -62.9,
+      "y": -35.4
+    },
+    {
+      "id": "catedral_san_marcos",
+      "x": 848.5,
+      "y": -239.9
+    },
+    {
+      "id": "acceso_teran_sur",
+      "x": -3564.5,
+      "y": -750.0
+    },
+    {
+      "id": "acceso_unach_campus_i",
+      "x": -3181.8,
+      "y": -750.0
+    },
+    {
+      "id": "parada_plaza_crystal_sur",
+      "x": -2600.0,
+      "y": -750.0
+    },
+    {
+      "id": "interseccion_15_poniente_sur",
+      "x": -2027.4,
+      "y": -750.0
+    },
+    {
+      "id": "interseccion_12_poniente_sur",
+      "x": -1450.0,
+      "y": -750.0
+    },
+    {
+      "id": "parque_deportivo_poniente",
+      "x": -900.0,
+      "y": -750.0
+    },
+    {
+      "id": "interseccion_avenida_central_sur",
+      "x": -467.4,
+      "y": -750.0
+    },
+    {
+      "id": "parada_mercado_juan_sabines",
+      "x": 808.0,
+      "y": -472.0
+    },
+    {
+      "id": "hospital_regional",
+      "x": 696.1,
+      "y": -1092.1
+    },
+    {
+      "id": "rampa_cana_hueca_alternativa",
+      "x": -2020.0,
+      "y": 260.0
+    }
+  ],
+  "tramos": [
+    {
+      "de": "interseccion_teran_norte_01",
+      "a": "interseccion_teran_norte_02",
+      "distancia_m": 421,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_teran_norte_01",
+      "a": "interseccion_teran_norte_03",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_teran_norte_02",
+      "a": "parque_tuchtlan",
+      "distancia_m": 640,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_teran_norte_02",
+      "a": "interseccion_unach_fca_norte",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_tuchtlan",
+      "a": "parque_joyyo_mayu",
+      "distancia_m": 469,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_tuchtlan",
+      "a": "interseccion_ciro_farrera_norte",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_joyyo_mayu",
+      "a": "plaza_las_americas",
+      "distancia_m": 801,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_joyyo_mayu",
+      "a": "parque_cana_hueca",
+      "distancia_m": 427,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "plaza_las_americas",
+      "a": "interseccion_5a_norte_poniente_01",
+      "distancia_m": 605,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "plaza_las_americas",
+      "a": "plaza_santa_elena",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_5a_norte_poniente_01",
+      "a": "parque_juventud_norte",
+      "distancia_m": 476,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_5a_norte_poniente_01",
+      "a": "plaza_del_sol",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_juventud_norte",
+      "a": "parada_marimba_norte",
+      "distancia_m": 515,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_juventud_norte",
+      "a": "parada_bicentenario_norte",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_marimba_norte",
+      "a": "interseccion_11a_oriente_norte",
+      "distancia_m": 934,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_marimba_norte",
+      "a": "parque_juventud_poniente",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_11a_oriente_norte",
+      "a": "palacio_gobierno_norte",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_teran_norte_03",
+      "a": "interseccion_unach_fca_norte",
+      "distancia_m": 421,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_teran_norte_03",
+      "a": "interseccion_blvd_belisario_unach",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_unach_fca_norte",
+      "a": "interseccion_ciro_farrera_norte",
+      "distancia_m": 640,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_unach_fca_norte",
+      "a": "parada_unach_belisario",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_ciro_farrera_norte",
+      "a": "parque_cana_hueca",
+      "distancia_m": 633,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_ciro_farrera_norte",
+      "a": "parada_crystal_norte",
+      "distancia_m": 665,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_cana_hueca",
+      "a": "plaza_santa_elena",
+      "distancia_m": 639,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_cana_hueca",
+      "a": "estacionamiento_cana_hueca",
+      "distancia_m": 87,
+      "penalizacion": 6,
+      "tipo": "escalera"
+    },
+    {
+      "de": "plaza_santa_elena",
+      "a": "plaza_del_sol",
+      "distancia_m": 605,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "plaza_santa_elena",
+      "a": "interseccion_12_poniente_belisario",
+      "distancia_m": 420,
+      "penalizacion": 0,
+      "tipo": "rampa"
+    },
+    {
+      "de": "plaza_del_sol",
+      "a": "parada_bicentenario_norte",
+      "distancia_m": 476,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "plaza_del_sol",
+      "a": "blvd_belisario_poniente",
+      "distancia_m": 403,
+      "penalizacion": 6,
+      "tipo": "escalera"
+    },
+    {
+      "de": "parada_bicentenario_norte",
+      "a": "parque_juventud_poniente",
+      "distancia_m": 515,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_bicentenario_norte",
+      "a": "parque_bicentenario",
+      "distancia_m": 567,
+      "penalizacion": 0,
+      "tipo": "rampa"
+    },
+    {
+      "de": "parque_juventud_poniente",
+      "a": "palacio_gobierno_norte",
+      "distancia_m": 934,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_juventud_poniente",
+      "a": "parque_marimba",
+      "distancia_m": 386,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "palacio_gobierno_norte",
+      "a": "parada_catedral_norte",
+      "distancia_m": 319,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_blvd_belisario_unach",
+      "a": "parada_unach_belisario",
+      "distancia_m": 421,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_blvd_belisario_unach",
+      "a": "rectoria_unach",
+      "distancia_m": 205,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_unach_belisario",
+      "a": "parada_crystal_norte",
+      "distancia_m": 427,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_unach_belisario",
+      "a": "facultad_contaduria_unach",
+      "distancia_m": 348,
+      "penalizacion": 0,
+      "tipo": "rampa"
+    },
+    {
+      "de": "parada_crystal_norte",
+      "a": "estacionamiento_cana_hueca",
+      "distancia_m": 981,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_crystal_norte",
+      "a": "plaza_crystal",
+      "distancia_m": 68,
+      "penalizacion": 6,
+      "tipo": "escalera"
+    },
+    {
+      "de": "estacionamiento_cana_hueca",
+      "a": "interseccion_12_poniente_belisario",
+      "distancia_m": 730,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "estacionamiento_cana_hueca",
+      "a": "interseccion_ciro_farrera_belisario",
+      "distancia_m": 534,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_12_poniente_belisario",
+      "a": "blvd_belisario_poniente",
+      "distancia_m": 605,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_12_poniente_belisario",
+      "a": "interseccion_15_poniente_belisario",
+      "distancia_m": 275,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "blvd_belisario_poniente",
+      "a": "parque_bicentenario",
+      "distancia_m": 495,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "blvd_belisario_poniente",
+      "a": "interseccion_bicentenario_sur",
+      "distancia_m": 275,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_bicentenario",
+      "a": "parque_marimba",
+      "distancia_m": 532,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_bicentenario",
+      "a": "parada_central",
+      "distancia_m": 534,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_marimba",
+      "a": "parada_catedral_norte",
+      "distancia_m": 936,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parque_marimba",
+      "a": "museo_de_la_marimba",
+      "distancia_m": 80,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_catedral_norte",
+      "a": "catedral_san_marcos",
+      "distancia_m": 330,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "rectoria_unach",
+      "a": "facultad_contaduria_unach",
+      "distancia_m": 437,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "rectoria_unach",
+      "a": "acceso_teran_sur",
+      "distancia_m": 621,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "facultad_contaduria_unach",
+      "a": "plaza_crystal",
+      "distancia_m": 431,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "facultad_contaduria_unach",
+      "a": "acceso_unach_campus_i",
+      "distancia_m": 507,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "plaza_crystal",
+      "a": "interseccion_ciro_farrera_belisario",
+      "distancia_m": 847,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "plaza_crystal",
+      "a": "parada_plaza_crystal_sur",
+      "distancia_m": 620,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_ciro_farrera_belisario",
+      "a": "interseccion_15_poniente_belisario",
+      "distancia_m": 636,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_ciro_farrera_belisario",
+      "a": "interseccion_15_poniente_sur",
+      "distancia_m": 550,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_15_poniente_belisario",
+      "a": "interseccion_bicentenario_sur",
+      "distancia_m": 605,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_15_poniente_belisario",
+      "a": "interseccion_12_poniente_sur",
+      "distancia_m": 550,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_bicentenario_sur",
+      "a": "parada_central",
+      "distancia_m": 991,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_bicentenario_sur",
+      "a": "parque_deportivo_poniente",
+      "distancia_m": 550,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_central",
+      "a": "museo_de_la_marimba",
+      "distancia_m": 246,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_central",
+      "a": "interseccion_avenida_central_sur",
+      "distancia_m": 753,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "museo_de_la_marimba",
+      "a": "catedral_san_marcos",
+      "distancia_m": 1028,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "museo_de_la_marimba",
+      "a": "parada_mercado_juan_sabines",
+      "distancia_m": 1072,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "catedral_san_marcos",
+      "a": "hospital_regional",
+      "distancia_m": 953,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "acceso_teran_sur",
+      "a": "acceso_unach_campus_i",
+      "distancia_m": 479,
+      "penalizacion": 3,
+      "tipo": "dificil"
+    },
+    {
+      "de": "acceso_unach_campus_i",
+      "a": "parada_plaza_crystal_sur",
+      "distancia_m": 640,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_plaza_crystal_sur",
+      "a": "interseccion_15_poniente_sur",
+      "distancia_m": 716,
+      "penalizacion": 3,
+      "tipo": "dificil"
+    },
+    {
+      "de": "interseccion_15_poniente_sur",
+      "a": "interseccion_12_poniente_sur",
+      "distancia_m": 636,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_12_poniente_sur",
+      "a": "parque_deportivo_poniente",
+      "distancia_m": 688,
+      "penalizacion": 3,
+      "tipo": "dificil"
+    },
+    {
+      "de": "parque_deportivo_poniente",
+      "a": "interseccion_avenida_central_sur",
+      "distancia_m": 476,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "interseccion_avenida_central_sur",
+      "a": "parada_mercado_juan_sabines",
+      "distancia_m": 1632,
+      "penalizacion": 3,
+      "tipo": "dificil"
+    },
+    {
+      "de": "parada_mercado_juan_sabines",
+      "a": "hospital_regional",
+      "distancia_m": 694,
+      "penalizacion": 0,
+      "tipo": "calle"
+    },
+    {
+      "de": "parada_crystal_norte",
+      "a": "facultad_contaduria_unach",
+      "distancia_m": 413,
+      "penalizacion": 0,
+      "tipo": "rampa"
+    },
+    {
+      "de": "parque_cana_hueca",
+      "a": "rampa_cana_hueca_alternativa",
+      "distancia_m": 42,
+      "penalizacion": 0,
+      "tipo": "rampa"
+    },
+    {
+      "de": "rampa_cana_hueca_alternativa",
+      "a": "estacionamiento_cana_hueca",
+      "distancia_m": 70,
+      "penalizacion": 0,
+      "tipo": "rampa"
+    }
+  ],
+  "rutas": [
+    {
+      "id": "ruta_1_belisario_ida",
+      "tarifa": 11.0,
+      "espera_min": 5,
+      "paradas": [
+        "parada_unach_belisario",
+        "plaza_crystal",
+        "parque_bicentenario",
+        "parque_marimba",
+        "parada_central",
+        "catedral_san_marcos"
+      ],
+      "tiempos_min": [
+        1.5,
+        6.5,
+        1.5,
+        1.0,
+        2.5
+      ]
+    },
+    {
+      "id": "ruta_2_calle_central_ida",
+      "tarifa": 11.0,
+      "espera_min": 5,
+      "paradas": [
+        "interseccion_11a_oriente_norte",
+        "parada_catedral_norte",
+        "catedral_san_marcos",
+        "parada_central",
+        "parada_mercado_juan_sabines",
+        "hospital_regional"
+      ],
+      "tiempos_min": [
+        2.0,
+        1.0,
+        2.5,
+        2.5,
+        2.0
+      ]
+    }
+  ]
+}

@@ -1,4 +1,10 @@
-"""Carga un mapa desde un archivo JSON y construye el Grafo."""
+"""Carga un mapa desde archivos JSON y construye el Grafo.
+
+El mapa (nodos y tramos) vive en un JSON. Las rutas de transporte pueden venir:
+1. de un archivo indicado explícitamente (`ruta_rutas`);
+2. de la clave "rutas" del propio mapa;
+3. de `rutas_transporte.json`, en la misma carpeta del mapa, si existe.
+"""
 from __future__ import annotations
 
 import json
@@ -6,6 +12,8 @@ from pathlib import Path
 from typing import Any
 
 from core.grafo import ErrorMapa, Grafo, Nodo, RutaTransporte, Tramo
+
+RUTAS_POR_DEFECTO = "rutas_transporte.json"
 
 
 def _exigir(dic: Any, campo: str, donde: str) -> Any:
@@ -64,11 +72,38 @@ def grafo_desde_dict(datos: dict) -> Grafo:
     return Grafo(nodos, tramos, rutas)
 
 
-def cargar_mapa(ruta_json: str | Path) -> Grafo:
-    """Lee un archivo JSON y devuelve el Grafo validado."""
-    with open(ruta_json, encoding="utf-8") as f:
+def _leer_json(ruta: str | Path) -> Any:
+    with open(ruta, encoding="utf-8") as f:
         try:
-            datos = json.load(f)
+            return json.load(f)
         except json.JSONDecodeError as e:
-            raise ErrorMapa(f"El archivo {ruta_json} no es un JSON válido: {e}") from e
+            raise ErrorMapa(f"El archivo {ruta} no es un JSON válido: {e}") from e
+
+
+def _rutas_de(contenido: Any) -> list:
+    """Acepta {"rutas": [...]} o directamente una lista de rutas."""
+    if isinstance(contenido, dict):
+        return contenido.get("rutas", [])
+    return contenido
+
+
+def cargar_mapa(ruta_json: str | Path, ruta_rutas: str | Path | None = None) -> Grafo:
+    """Lee el mapa y devuelve el Grafo validado.
+
+    Las rutas de transporte se toman, en este orden, de:
+    1. `ruta_rutas`, si se indica;
+    2. la clave "rutas" del propio mapa, si existe;
+    3. `rutas_transporte.json` en la misma carpeta, si existe.
+    """
+    ruta_json = Path(ruta_json)
+    datos = _leer_json(ruta_json)
+    if not isinstance(datos, dict):
+        raise ErrorMapa(f"{ruta_json} debe contener un objeto JSON")
+
+    if ruta_rutas is not None:
+        datos["rutas"] = _rutas_de(_leer_json(ruta_rutas))
+    elif "rutas" not in datos:
+        hermano = ruta_json.parent / RUTAS_POR_DEFECTO
+        if hermano.exists():
+            datos["rutas"] = _rutas_de(_leer_json(hermano))
     return grafo_desde_dict(datos)
