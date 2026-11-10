@@ -337,17 +337,12 @@ def crear_figura_mapa_plotly(
         dx, dy = pos_vis[elementos.destino_id]
         nom_d = formatear_nombre_nodo(elementos.destino_id)
         col_d = COLOR_META if (paso_exploracion and paso_exploracion.es_meta) else COLOR_DESTINO
-        txt_meta = f"META ALCANZADA: {nom_d}" if (paso_exploracion and paso_exploracion.es_meta) else f"DESTINO: {nom_d}"
-        c_font = "#34d399" if (paso_exploracion and paso_exploracion.es_meta) else "#fb7185"
         fig.add_trace(
             go.Scatter(
                 x=[dx],
                 y=[dy],
-                mode="markers+text",
+                mode="markers",
                 marker=dict(color=col_d, size=22, symbol="star", line=dict(color="white", width=2.5)),
-                text=[txt_meta],
-                textposition="top center",
-                textfont=dict(color=c_font, size=11, family="Segoe UI", weight="bold"),
                 name="Destino",
                 hoverinfo="text",
                 hovertext=f"<b>Punto de Llegada:</b> {nom_d}",
